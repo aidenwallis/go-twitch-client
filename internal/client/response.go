@@ -20,7 +20,7 @@ type Response struct {
 
 // WithBody takes the response and unmarshals a body from it
 func WithBody[Body any](r *Response) (*Body, error) {
-	defer r.Body.Close()
+	defer safeCleanupBody(r)
 
 	if err := handleError(r); err != nil {
 		return nil, err
@@ -33,9 +33,15 @@ func WithBody[Body any](r *Response) (*Body, error) {
 	return &body, nil
 }
 
+func safeCleanupBody(r *Response) {
+	if r.err == nil {
+		r.Body.Close()
+	}
+}
+
 // WithoutBody only inspects the HTTP status and returns without a body
 func WithoutBody(r *Response) error {
-	defer r.Body.Close()
+	defer safeCleanupBody(r)
 	return handleError(r)
 }
 

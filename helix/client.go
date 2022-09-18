@@ -23,6 +23,7 @@ type helixClient struct {
 	*client.Client
 
 	accessTokenLoader AccessTokenLoader
+	clientID          string
 }
 
 // RequestOptions are the common options passed to every request
@@ -73,6 +74,7 @@ func NewClient(options *ClientOptions) Client {
 
 	return &helixClient{
 		accessTokenLoader: options.AccessTokenLoader,
+		clientID:          options.ClientID,
 		Client: client.NewClient(&client.Options{
 			RequestTimeout: options.RequestTimeout,
 			Transport:      options.Transport,
@@ -85,6 +87,7 @@ func (c *helixClient) headers(options *RequestOptions) func(context.Context) (ht
 		h := http.Header{}
 
 		h.Set("Accept", "application/json")
+		h.Set("Client-ID", c.clientID)
 
 		if options != nil && options.Token != "" {
 			setToken(h, options.Token)

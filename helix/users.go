@@ -12,19 +12,19 @@ import (
 
 // Users defines the users namespace
 type Users interface {
-	// BlockUser implements /helix/users/blocks
+	// BlockUser implements https://dev.twitch.tv/docs/api/reference#block-user
 	BlockUser(ctx context.Context, req *BlockUserRequest) error
 
-	// GetUserFollows implements /helix/users/follows
+	// GetUserBlocks implements https://dev.twitch.tv/docs/api/reference#get-user-block-list
 	GetUserBlocks(context.Context, *GetUserBlocksRequest) (*GetUserBlocksResponse, error)
 
-	// GetUserFollows implements /helix/users/follows
+	// GetUserFollows implements https://dev.twitch.tv/docs/api/reference#get-users-follows
 	GetUserFollows(context.Context, *GetUserFollowsRequest) (*GetUserFollowsResponse, error)
 
-	// GetUsers implements /helix/users
+	// GetUsers implements https://dev.twitch.tv/docs/api/reference#get-users
 	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 
-	// UnblockUser implements /helix/users/blocks
+	// UnblockUser implements https://dev.twitch.tv/docs/api/reference#unblock-user
 	UnblockUser(ctx context.Context, req *UnblockUserRequest) error
 }
 
@@ -79,7 +79,7 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// GetUsers implements /helix/users
+// GetUsers implements https://dev.twitch.tv/docs/api/reference#get-users
 func (c *helixClient) GetUsers(ctx context.Context, req *GetUsersRequest) (*GetUsersResponse, error) {
 	values := url.Values{}
 	for _, v := range req.IDs {
@@ -159,7 +159,7 @@ type UserFollow struct {
 	FollowedAt time.Time `json:"followed_at"`
 }
 
-// GetUserFollows implements /helix/users/follows
+// GetUserFollows implements https://dev.twitch.tv/docs/api/reference#get-users-follows
 func (c *helixClient) GetUserFollows(ctx context.Context, req *GetUserFollowsRequest) (*GetUserFollowsResponse, error) {
 	values := url.Values{}
 	if req.After != "" {
@@ -189,11 +189,14 @@ const userBlocksPath = "https://api.twitch.tv/helix/users/blocks"
 type GetUserBlocksRequest struct {
 	*RequestOptions
 
-	// After is a Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.
+	// BroadcasterID is the User ID for a Twitch user. This must match your access tokens' user.
+	BroadcasterID string
+
+	// After (optional) is a Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response.
 	// The cursor value specified here is from the pagination response field of a prior query.
 	After string
 
-	// First is the Maximum number of objects to return. Maximum: 100. Default: 20.
+	// First (optional) is the Maximum number of objects to return. Maximum: 100. Default: 20.
 	First int
 }
 
@@ -227,9 +230,10 @@ type UserBlock struct {
 	DisplayName string `json:"display_name"`
 }
 
-// GetUserBlocks implements /helix/users/blocks
+// GetUserBlocks implements https://dev.twitch.tv/docs/api/reference#get-user-block-list
 func (c *helixClient) GetUserBlocks(ctx context.Context, req *GetUserBlocksRequest) (*GetUserBlocksResponse, error) {
 	values := url.Values{}
+	values.Set("broadcaster_id", req.BroadcasterID)
 	if req.After != "" {
 		values.Set("after", req.After)
 	}
@@ -259,7 +263,7 @@ type BlockUserRequest struct {
 	Reason string
 }
 
-// BlockUser implements /helix/users/blocks
+// BlockUser implements https://dev.twitch.tv/docs/api/reference#block-user
 func (c *helixClient) BlockUser(ctx context.Context, req *BlockUserRequest) error {
 	values := url.Values{}
 	values.Set("target_user_id", req.TargetUserID)
@@ -286,7 +290,7 @@ type UnblockUserRequest struct {
 	TargetUserID string
 }
 
-// UnblockUser implements /helix/users/blocks
+// UnblockUser implements https://dev.twitch.tv/docs/api/reference#unblock-user
 func (c *helixClient) UnblockUser(ctx context.Context, req *UnblockUserRequest) error {
 	values := url.Values{}
 	values.Set("target_user_id", req.TargetUserID)
