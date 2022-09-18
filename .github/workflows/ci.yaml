@@ -1,0 +1,58 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  pull-requests: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ["1.18", "1.19"]
+    name: lint - go ${{ matrix.go }}
+    steps:
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          only-new-issues: true
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ["1.18", "1.19"]
+    name: lint - go ${{ matrix.go }}
+    steps:
+      - name: Setup go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
+        id: go
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Make out dir
+        run: |
+          mkdir out
+
+      - name: Run tests
+        run: |
+          go test -race ./... -coverprofile=out/coverage.txt -covermode=atomic
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v2
+        with:
+          files: out/coverage.txt
