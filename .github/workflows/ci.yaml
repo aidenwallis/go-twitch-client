@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         go: ["1.18", "1.19"]
-    name: lint - go ${{ matrix.go }}
+    name: test - go ${{ matrix.go }}
     steps:
       - name: Setup go
         uses: actions/setup-go@v1
