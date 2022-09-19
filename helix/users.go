@@ -94,12 +94,8 @@ type User struct {
 // GetUsers implements https://dev.twitch.tv/docs/api/reference#get-users
 func (c *helixClient) GetUsers(ctx context.Context, req *GetUsersRequest) (*GetUsersResponse, error) {
 	values := url.Values{}
-	for _, v := range req.IDs {
-		values.Add("id", v)
-	}
-	for _, v := range req.Logins {
-		values.Add("login", v)
-	}
+	values["id"] = req.IDs
+	values["login"] = req.Logins
 
 	return client.WithBody[GetUsersResponse](c.Request(&client.RequestConfig{
 		Headers: c.headers(req.RequestOptions),

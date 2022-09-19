@@ -11,9 +11,9 @@
 
 ## Channels
 
-- [ ] [Get Channel Information](https://dev.twitch.tv/docs/api/reference#get-channel-information)
-- [ ] [Modify Channel Information](https://dev.twitch.tv/docs/api/reference#modify-channel-information)
-- [ ] [Get Channel Editors](https://dev.twitch.tv/docs/api/reference#get-channel-editors)
+- [x] [Get Channel Information](https://dev.twitch.tv/docs/api/reference#get-channel-information)
+- [x] [Modify Channel Information](https://dev.twitch.tv/docs/api/reference#modify-channel-information)
+- [x] [Get Channel Editors](https://dev.twitch.tv/docs/api/reference#get-channel-editors)
 
 ## Channel Points
 

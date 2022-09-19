@@ -12,6 +12,7 @@ import (
 type Client interface {
 	Ads
 	Analytics
+	Channels
 	Users
 }
 
