@@ -13,7 +13,7 @@ import (
 // Users defines the users namespace
 type Users interface {
 	// BlockUser implements https://dev.twitch.tv/docs/api/reference#block-user
-	BlockUser(ctx context.Context, req *BlockUserRequest) error
+	BlockUser(context.Context, *BlockUserRequest) error
 
 	// GetUserBlocks implements https://dev.twitch.tv/docs/api/reference#get-user-block-list
 	GetUserBlocks(context.Context, *GetUserBlocksRequest) (*GetUserBlocksResponse, error)
@@ -25,7 +25,19 @@ type Users interface {
 	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 
 	// UnblockUser implements https://dev.twitch.tv/docs/api/reference#unblock-user
-	UnblockUser(ctx context.Context, req *UnblockUserRequest) error
+	UnblockUser(context.Context, *UnblockUserRequest) error
+
+	// UpdateUser implements https://dev.twitch.tv/docs/api/reference#update-user
+	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
+
+	// GetUserExtensions implements https://dev.twitch.tv/docs/api/reference#get-user-extensions
+	GetUserExtensions(context.Context, *GetUserExtensionsRequest) (*GetUserExtensionsResponse, error)
+
+	// GetUserActiveExtensions implements https://dev.twitch.tv/docs/api/reference#get-user-active-extensions
+	GetUserActiveExtensions(context.Context, *GetUserActiveExtensionsRequest) (*GetUserActiveExtensionsResponse, error)
+
+	// UpdateUserExtensions implements https://dev.twitch.tv/docs/api/reference#update-user-extensions
+	UpdateUserExtensions(context.Context, *UpdateUserExtensionsRequest) (*UpdateUserExtensionsResponse, error)
 }
 
 const usersPath = "https://api.twitch.tv/helix/users"
@@ -301,4 +313,162 @@ func (c *helixClient) UnblockUser(ctx context.Context, req *UnblockUserRequest) 
 		URL:     userBlocksPath,
 		Query:   values,
 	}).Do(ctx))
+}
+
+// UpdateUserRequest defines the set of options passed to UpdateUser
+type UpdateUserRequest struct {
+	*RequestOptions
+
+	// Description is the User’s account description
+	Description string `json:"description"`
+}
+
+// UpdateUserResponse defines the API response when calling UpdateUser
+type UpdateUserResponse struct {
+	// Data represents a slice of User
+	Data []*User `json:"data"`
+}
+
+// UpdateUser implements https://dev.twitch.tv/docs/api/reference#update-user
+func (c *helixClient) UpdateUser(ctx context.Context, req *UpdateUserRequest) (*UpdateUserResponse, error) {
+	values := url.Values{}
+	values.Set("description", req.Description)
+
+	return client.WithBody[UpdateUserResponse](c.Request(&client.RequestConfig{
+		Headers: c.headers(req.RequestOptions),
+		Method:  http.MethodPut,
+		URL:     usersPath,
+		Query:   values,
+	}).Do(ctx))
+}
+
+const userExtensionsListPath = "https://api.twitch.tv/helix/extensions/list"
+
+// GetUserExtensionsRequest represents the set of options passed to GetUserExtensions
+type GetUserExtensionsRequest struct {
+	*RequestOptions
+}
+
+// GetUserExtensionsResponse defines the API response when calling GetUserExtensions
+type GetUserExtensionsResponse struct {
+	// Data is a slice of UserExtension
+	Data []*UserExtension `json:"data"`
+}
+
+// UserExtension represents a Helix user extension
+type UserExtension struct {
+	// ID of the extension.
+	ID string `json:"id"`
+
+	// Name of the extension.
+	Name string `json:"name"`
+
+	// Version of the extension.
+	Version string `json:"version"`
+
+	// Type are the Types for which the extension can be activated. Valid values: "component", "mobile", "panel", "overlay".
+	Type []string `json:"type"`
+
+	// CanActivate indicates whether the extension is configured such that it can be activated.
+	CanActivate bool `json:"can_activate"`
+}
+
+// GetUserExtensions implements https://dev.twitch.tv/docs/api/reference#get-user-extensions
+func (c *helixClient) GetUserExtensions(ctx context.Context, req *GetUserExtensionsRequest) (*GetUserExtensionsResponse, error) {
+	return client.WithBody[GetUserExtensionsResponse](c.Request(&client.RequestConfig{
+		Method:  http.MethodGet,
+		URL:     userExtensionsListPath,
+		Headers: c.headers(req.RequestOptions),
+	}).Do(ctx))
+}
+
+const userExtensionsPath = "https://api.twitch.tv/helix/extensions"
+
+// GetUserActiveExtensionsRequest defines the options passed to GetUserActiveExtensions
+type GetUserActiveExtensionsRequest struct {
+	*RequestOptions
+
+	// UserID is the ID of the user whose installed extensions will be returned.
+	UserID string
+}
+
+// GetUserActiveExtensionsResponse defines the API response returned by GetUserActiveExtensions
+type GetUserActiveExtensionsResponse struct {
+	// Data defines the maps for different extension types
+	Data UserActiveExtensionsProperties `json:"data"`
+}
+
+// UserActiveExtensionProperties defines the maps that contain different UserActiveExtension
+type UserActiveExtensionsProperties struct {
+	// Component contains data for video-component Extensions.
+	Component map[string]*UserActiveExtension `json:"component"`
+
+	// Panel contains data for panel Extensions.
+	Panel map[string]*UserActiveExtension `json:"panel"`
+
+	// Overlay contains data for video-overlay Extensions.
+	Overlay map[string]*UserActiveExtension `json:"overlay"`
+}
+
+// UserActiveExtension represents an active user extension on Helix
+type UserActiveExtension struct {
+	// Active is the Activation state of the extension, for each extension type
+	// (component, overlay, mobile, panel). If false, no other data is provided.
+	Active bool `json:"active"`
+
+	// ID of the extension.
+	ID string `json:"id,omitempty"`
+
+	// Name of the extension.
+	Name string `json:"name,omitempty"`
+
+	// Version of the extension.
+	Version string `json:"version,omitempty"`
+
+	// X (Video-component Extensions only) X-coordinate of the placement of the extension.
+	X int `json:"x"`
+
+	// Y (Video-component Extensions only) Y-coordinate of the placement of the extension.
+	Y int `json:"y"`
+}
+
+// GetUserActiveExtensions implements https://dev.twitch.tv/docs/api/reference#get-user-active-extensions
+func (c *helixClient) GetUserActiveExtensions(ctx context.Context, req *GetUserActiveExtensionsRequest) (*GetUserActiveExtensionsResponse, error) {
+	values := url.Values{}
+	values.Set("user_id", req.UserID)
+
+	return client.WithBody[GetUserActiveExtensionsResponse](c.Request(&client.RequestConfig{
+		Method:  http.MethodGet,
+		URL:     userExtensionsPath,
+		Headers: c.headers(req.RequestOptions),
+		Query:   values,
+	}).Do(ctx))
+}
+
+// UpdateUserExtensionsRequest defines the options passed to UpdateUserExtensions
+type UpdateUserExtensionsRequest struct {
+	*RequestOptions
+
+	// Body defines the new state of active extensions.
+	Body *UserActiveExtensionsProperties
+}
+
+// UpdateUserExtensionsResponse defines the API response returned by UpdateUserExtensions
+type UpdateUserExtensionsResponse struct {
+	// Data defines the maps for different extension types
+	Data UserActiveExtensionsProperties `json:"data"`
+}
+
+// updateUserExtensionsBody is the private body schema used when invoking the endpoint behind UpdateUserExtensions
+type updateUserExtensionsBody struct {
+	Data *UserActiveExtensionsProperties `json:"data"`
+}
+
+// UpdateUserExtensions implements https://dev.twitch.tv/docs/api/reference#update-user-extensions
+func (c *helixClient) UpdateUserExtensions(ctx context.Context, req *UpdateUserExtensionsRequest) (*UpdateUserExtensionsResponse, error) {
+	return client.WithBody[UpdateUserExtensionsResponse](c.Request(&client.RequestConfig{
+		Method:  http.MethodPut,
+		URL:     userExtensionsPath,
+		Headers: c.headers(req.RequestOptions),
+	}).BodyJSON(&updateUserExtensionsBody{Data: req.Body}).Do(ctx))
 }

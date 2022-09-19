@@ -28,6 +28,7 @@ type helixClient struct {
 
 // RequestOptions are the common options passed to every request
 type RequestOptions struct {
+	// Token is the OAuth bearer token for the Twitch request
 	Token string
 }
 
