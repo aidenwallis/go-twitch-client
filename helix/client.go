@@ -11,6 +11,7 @@ import (
 // Client defines the helix client
 type Client interface {
 	Ads
+	Analytics
 	Users
 }
 
