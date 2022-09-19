@@ -2,12 +2,12 @@
 
 ## Ads
 
-- [ ] [Start Commercial](https://dev.twitch.tv/docs/api/reference#start-commercial)
+- [x] [Start Commercial](https://dev.twitch.tv/docs/api/reference#start-commercial)
 
 ## Analytics
 
-- [ ] [Get Extension Analytics](https://dev.twitch.tv/docs/api/reference#get-extension-analytics)
-- [ ] [Get Game Analytics](https://dev.twitch.tv/docs/api/reference#get-game-analytics)
+- [x] [Get Extension Analytics](https://dev.twitch.tv/docs/api/reference#get-extension-analytics)
+- [x] [Get Game Analytics](https://dev.twitch.tv/docs/api/reference#get-game-analytics)
 
 ## Channels
 
