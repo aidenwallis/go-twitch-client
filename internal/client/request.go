@@ -40,6 +40,7 @@ func (c *Client) Request(conf *RequestConfig) *Request {
 	return &Request{
 		client:         c,
 		headersFactory: conf.Headers,
+		headers:        http.Header{},
 		method:         conf.Method,
 		query:          conf.Query,
 		url:            conf.URL,
