@@ -1,5 +1,20 @@
 # Endpoint Progress
 
+## Ads
+
+- [ ] [Start Commercial](https://dev.twitch.tv/docs/api/reference#start-commercial)
+
+## Analytics
+
+- [ ] [Get Extension Analytics](https://dev.twitch.tv/docs/api/reference#get-extension-analytics)
+- [ ] [Get Game Analytics](https://dev.twitch.tv/docs/api/reference#get-game-analytics)
+
+## Channels
+
+- [ ] [Get Channel Information](https://dev.twitch.tv/docs/api/reference#get-channel-information)
+- [ ] [Modify Channel Information](https://dev.twitch.tv/docs/api/reference#modify-channel-information)
+- [ ] [Get Channel Editors](https://dev.twitch.tv/docs/api/reference#get-channel-editors)
+
 ## Users
 
 - [x] [Get Users](https://dev.twitch.tv/docs/api/reference#get-users)
