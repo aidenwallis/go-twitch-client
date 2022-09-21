@@ -30,16 +30,16 @@
 
 ## Chat
 
-- [ ] [Get Channel Emotes](https://dev.twitch.tv/docs/api/reference#get-channel-emotes)
-- [ ] [Get Global Emotes](https://dev.twitch.tv/docs/api/reference#get-global-emotes)
-- [ ] [Get Emote Sets](https://dev.twitch.tv/docs/api/reference#get-emote-sets)
-- [ ] [Get Channel Chat Badges](https://dev.twitch.tv/docs/api/reference#get-channel-chat-badges)
-- [ ] [Get Global Chat Badges](https://dev.twitch.tv/docs/api/reference#get-global-chat-badges)
-- [ ] [Get Chat Settings](https://dev.twitch.tv/docs/api/reference#get-chat-settings)
-- [ ] [Update Chat Settings](https://dev.twitch.tv/docs/api/reference#update-chat-settings)
-- [ ] [Send Chat Announcement](https://dev.twitch.tv/docs/api/reference#send-chat-announcement)
-- [ ] [Get User Chat Color](https://dev.twitch.tv/docs/api/reference#get-user-chat-color)
-- [ ] [Update User Chat Color](https://dev.twitch.tv/docs/api/reference#update-user-chat-color)
+- [x] [Get Channel Emotes](https://dev.twitch.tv/docs/api/reference#get-channel-emotes)
+- [x] [Get Global Emotes](https://dev.twitch.tv/docs/api/reference#get-global-emotes)
+- [x] [Get Emote Sets](https://dev.twitch.tv/docs/api/reference#get-emote-sets)
+- [x] [Get Channel Chat Badges](https://dev.twitch.tv/docs/api/reference#get-channel-chat-badges)
+- [x] [Get Global Chat Badges](https://dev.twitch.tv/docs/api/reference#get-global-chat-badges)
+- [x] [Get Chat Settings](https://dev.twitch.tv/docs/api/reference#get-chat-settings)
+- [x] [Update Chat Settings](https://dev.twitch.tv/docs/api/reference#update-chat-settings)
+- [x] [Send Chat Announcement](https://dev.twitch.tv/docs/api/reference#send-chat-announcement)
+- [x] [Get User Chat Color](https://dev.twitch.tv/docs/api/reference#get-user-chat-color)
+- [x] [Update User Chat Color](https://dev.twitch.tv/docs/api/reference#update-user-chat-color)
 
 ## Clips
 
