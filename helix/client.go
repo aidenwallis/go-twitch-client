@@ -13,6 +13,7 @@ type Client interface {
 	Ads
 	Analytics
 	Channels
+	Chat
 	Users
 }
 
